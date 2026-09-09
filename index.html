@@ -156,18 +156,12 @@
         <div class="card">
           <div class="card-header">
             <h2>All Tasks</h2>
-            <div class="filter-with-mini-cat">
-              <!-- A small version of the cat sits right by the task list,
-                   since that's where most task completions happen. It
-                   mirrors the big cat on the Focus page (same state). -->
-              <span class="mini-cat" id="miniCat">🐱</span>
-              <select class="filter-select" id="filterSelect">
+            <select class="filter-select" id="filterSelect">
                 <option value="all">All Subjects</option>
                 <option value="math">Math</option>
                 <option value="science">Science</option>
                 <option value="history">History</option>
               </select>
-            </div>
           </div>
 
           <form class="add-task-form" id="addTaskForm">
@@ -282,31 +276,6 @@
 
           <p class="pomodoro-caption" id="pomodoroCaption">One focused session = 25 minutes</p>
           <p class="pomodoro-session-count" id="pomodoroSessionCount">0 sessions completed today</p>
-
-          <!-- The cat mascot! It lives here so it feels connected to
-               focus sessions, but JS reacts to it from anywhere tasks
-               are completed too. See style.css section 14 and script.js
-               section 9 for how it's drawn and animated. -->
-          <div class="cat-scene" id="catScene">
-            <div class="fish-treat" id="fishTreat">🐟</div>
-            <div class="cat" id="cat">
-              <div class="cat-ears">
-                <div class="cat-ear cat-ear-left"></div>
-                <div class="cat-ear cat-ear-right"></div>
-              </div>
-              <div class="cat-face">
-                <div class="cat-eye cat-eye-left"></div>
-                <div class="cat-eye cat-eye-right"></div>
-                <div class="cat-mouth"></div>
-                <div class="cat-whiskers cat-whiskers-left"></div>
-                <div class="cat-whiskers cat-whiskers-right"></div>
-                <div class="cat-blush cat-blush-left"></div>
-                <div class="cat-blush cat-blush-right"></div>
-              </div>
-              <div class="cat-tail"></div>
-            </div>
-            <p class="cat-caption" id="catCaption">Complete a task to feed the cat a treat!</p>
-          </div>
 
           <!-- A short "ding" sound for when a focus session ends.
                It's a tiny base64-encoded WAV file baked directly into

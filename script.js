@@ -83,6 +83,10 @@ document.addEventListener("DOMContentLoaded", () => {
   const themeIcon = themeToggle.querySelector(".theme-icon");
   const themeLabel = themeToggle.querySelector(".theme-label");
 
+  const greetingTitle = document.getElementById("greetingTitle");
+  const greetingSubtitle = document.getElementById("greetingSubtitle");
+  const dateBadge = document.getElementById("dateBadge");
+
   // Overview
   const heroPercent = document.getElementById("heroPercent");
   const heroBarFill = document.getElementById("heroBarFill");
@@ -102,7 +106,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const deadlineInput = document.getElementById("deadlineInput");
   const filterSelect = document.getElementById("filterSelect");
   const emptyState = document.getElementById("emptyState");
-  const miniCat = document.getElementById("miniCat");
 
   // Progress
   const progressRing = document.getElementById("progressRing");
@@ -123,10 +126,47 @@ document.addEventListener("DOMContentLoaded", () => {
   const customMinutesInput = document.getElementById("customMinutesInput");
   const timerEndSound = document.getElementById("timerEndSound");
 
-  // Cat mascot
-  const cat = document.getElementById("cat");
-  const catCaption = document.getElementById("catCaption");
-  const fishTreat = document.getElementById("fishTreat");
+
+  // =======================================================
+  // 2b. LIVE DATE / TIME (greeting + date badge)
+  // =======================================================
+  // Reads the browser's actual system clock — new Date() always
+  // returns "right now" — instead of any hardcoded day/time.
+  // We update the date badge once a minute so it never goes stale
+  // if the page is left open overnight.
+  function timeOfDayGreeting(hour) {
+    if (hour < 5) return "Good night";
+    if (hour < 12) return "Good morning";
+    if (hour < 18) return "Good afternoon";
+    return "Good evening";
+  }
+
+  function renderDateTime() {
+    const now = new Date();
+
+    greetingTitle.textContent = `${timeOfDayGreeting(now.getHours())}`;
+
+    dateBadge.textContent = now.toLocaleDateString(undefined, {
+      weekday: "long",
+      month: "short",
+      day: "numeric",
+    }) + " · " + now.toLocaleTimeString(undefined, {
+      hour: "numeric",
+      minute: "2-digit",
+    });
+
+    return now;
+  }
+
+  // Monday=0 ... Sunday=6, matching the order used by weekProgress/dayLabels
+  // below. JavaScript's own now.getDay() is Sunday=0, so we convert it.
+  function todayWeekIndex(now) {
+    const jsDay = now.getDay(); // 0 (Sun) - 6 (Sat)
+    return jsDay === 0 ? 6 : jsDay - 1;
+  }
+
+  let currentTime = renderDateTime();
+  setInterval(() => { currentTime = renderDateTime(); }, 60 * 1000);
 
 
   // =======================================================
@@ -286,6 +326,15 @@ document.addEventListener("DOMContentLoaded", () => {
     progressRingValue.textContent = `${percent}%`;
     progressCaption.textContent = `${done} of ${total} tasks done today`;
 
+    // Greeting subtitle reacts to real progress instead of a static line.
+    if (total > 0 && done === total) {
+      greetingSubtitle.textContent = "All done for today — nice work!";
+    } else if (done === 0) {
+      greetingSubtitle.textContent = "Let's get your first task done today.";
+    } else {
+      greetingSubtitle.textContent = "You're making steady progress today.";
+    }
+
     // Streak + focus snapshot text
     streakValue.textContent = `${state.streakDays}-day streak`;
     focusSnapshotValue.textContent = `${state.focusSessionsToday} session${state.focusSessionsToday === 1 ? "" : "s"} today`;
@@ -338,12 +387,6 @@ document.addEventListener("DOMContentLoaded", () => {
     task.completed = event.target.checked;
     saveState();
     renderEverythingTaskRelated();
-
-    // Only reward with a treat when a task is CHECKED (not unchecked) —
-    // we don't want the cat "celebrating" someone undoing progress.
-    if (task.completed) {
-      feedCat();
-    }
   });
 
   taskList.addEventListener("click", (event) => {
@@ -406,9 +449,10 @@ document.addEventListener("DOMContentLoaded", () => {
   // 5. WEEKLY CHART (renders into both Overview + Progress views)
   // =======================================================
   const dayLabels = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
-  const todayIndex = 2; // Wednesday — matches the date badge in the header
 
   function weekChartHTML() {
+    const todayIndex = todayWeekIndex(new Date());
+
     return state.weekProgress.map((value, index) => `
       <div class="week-bar-wrapper">
         <div class="week-bar ${index === todayIndex ? "is-today" : ""}" style="height: ${value}%;"></div>
@@ -425,57 +469,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
   // =======================================================
-  // 6. CAT MASCOT
-   // =======================================================
-  // Runs whenever a task is completed. Plays a short sequence:
-  // 1. drop the fish emoji down onto the cat (CSS animation)
-  // 2. once it "lands", switch the cat to its happy pose
-  // 3. after a moment, go back to the normal idle state
-  // We use setTimeout to line up steps 2 and 3 with how long the
-  // CSS animations actually take (matches the durations in style.css).
-  const catMessages = [
-    "Yum! Thanks for the treat!",
-    "Nice work — the cat approves.",
-    "One task down, one fish earned!",
-    "The cat is very proud of you.",
-  ];
-
-  let catAnimationTimeouts = [];
-
-  function feedCat() {
-    // If the cat is mid-animation from a previous task, clear those
-    // timers first so rapid clicking doesn't stack up glitchy animations.
-    catAnimationTimeouts.forEach((id) => clearTimeout(id));
-    catAnimationTimeouts = [];
-
-    // Restart the fish-drop animation. Removing and re-adding the class
-    // (via a tiny delay) lets the animation replay even if it just ran.
-    fishTreat.classList.remove("drop");
-    void fishTreat.offsetWidth; // forces the browser to notice the class was removed
-    fishTreat.classList.add("drop");
-
-    miniCat.classList.remove("is-happy");
-    void miniCat.offsetWidth;
-    miniCat.classList.add("is-happy");
-
-    // The fish animation takes ~0.9s to "land" — that's when the cat reacts.
-    const happyTimeout = setTimeout(() => {
-      cat.classList.add("happy");
-      catCaption.textContent = catMessages[Math.floor(Math.random() * catMessages.length)];
-    }, 650);
-
-    // Return to the idle look after enjoying the treat for a bit.
-    const idleTimeout = setTimeout(() => {
-      cat.classList.remove("happy");
-      catCaption.textContent = "Complete a task to feed the cat a treat!";
-    }, 2400);
-
-    catAnimationTimeouts.push(happyTimeout, idleTimeout);
-  }
-
-
-  // =======================================================
-  // 7. POMODORO TIMER
+  // 6. POMODORO TIMER
   // =======================================================
   // Total length of the current session, in seconds. Starts from
   // whatever duration was last saved (defaults to 25 minutes).
