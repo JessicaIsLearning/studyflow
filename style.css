@@ -1,12 +1,7 @@
-/* =========================================================
-   1. FONTS & CSS VARIABLES
-========================================================= */
+/* 1. FONTS & CSS VARIABLES */
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
 
 :root {
-  /* Brand palette — a calmer indigo/violet instead of a flat purple,
-     plus a warm amber accent for streaks/highlights so the page
-     doesn't feel monochrome. */
   --color-primary: #5b5fee;
   --color-primary-dark: #4548c9;
   --color-primary-light: #8f92f5;
@@ -72,9 +67,7 @@ body[data-theme="dark"] {
   --shadow-card-hover: 0 2px 4px rgba(0, 0, 0, 0.3), 0 14px 32px rgba(0, 0, 0, 0.35);
 }
 
-/* =========================================================
-   2. RESET / BASE
-========================================================= */
+/* 2. RESET / BASE */
 * {
   margin: 0;
   padding: 0;
@@ -107,9 +100,6 @@ input, select {
 
 h1, h2, h3 { letter-spacing: -0.01em; }
 
-/* Lucide icons inherit color and size from their parent by default;
-   this keeps every icon crisp and consistently sized unless a
-   component overrides it. */
 i[data-lucide] {
   width: 20px;
   height: 20px;
@@ -117,9 +107,7 @@ i[data-lucide] {
   vertical-align: middle;
 }
 
-/* =========================================================
-   3. APP LAYOUT
-========================================================= */
+/* 3. APP LAYOUT*/
 .app {
   display: flex;
   min-height: 100vh;
@@ -195,9 +183,7 @@ i[data-lucide] {
   transform: scale(0.98);
 }
 
-/* Active state: a soft tint rather than a hard solid fill, so it
-   reads as "selected" without shouting. The left accent bar gives
-   a clear, subtle indicator that works in both themes. */
+
 .nav-item.active {
   background-color: var(--color-primary-tint);
   color: var(--color-primary);
@@ -243,16 +229,14 @@ i[data-lucide] {
 
 .theme-icon { width: 17px; height: 17px; }
 
-/* ---------- Main Content ---------- */
+/*Main Content*/
 .main-content {
   flex-grow: 1;
   padding: 30px 40px 60px;
   max-width: 1180px;
 }
 
-/* =========================================================
-   4. GREETING
-========================================================= */
+/* 4. GREETING */
 .greeting-section {
   display: flex;
   justify-content: space-between;
@@ -283,13 +267,7 @@ i[data-lucide] {
   color: var(--text-secondary);
 }
 
-/* =========================================================
-   5. VIEW SWITCHING
-   =========================================================
-   Only one .view is shown at a time. We hide inactive views with
-   display:none (removed from layout entirely) and fade the active
-   one in — a small, calm transition rather than a hard cut.
-========================================================= */
+/* 5. VIEW SWITCHING */
 .view {
   display: none;
 }
@@ -304,9 +282,7 @@ i[data-lucide] {
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* =========================================================
-   6. CARD (shared building block)
-========================================================= */
+/* 6. CARD (shared building block) */
 .card {
   background-color: var(--bg-card);
   border: 1px solid var(--border-color);
@@ -353,11 +329,9 @@ i[data-lucide] {
   background-color: var(--color-primary-tint);
 }
 
-/* =========================================================
-   7. OVERVIEW VIEW
-========================================================= */
+/* 7. OVERVIEW VIEW */
 
-/* ---- Hero row ---- */
+/* Hero row */
 .hero-row {
   display: grid;
   grid-template-columns: 1.4fr 1fr 1fr;
@@ -471,7 +445,7 @@ i[data-lucide] {
   line-height: 1.35;
 }
 
-/* ---- Overview grid: tasks preview + deadlines + week chart ---- */
+/* Overview grid: tasks preview + deadlines + week chart */
 .overview-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -479,7 +453,7 @@ i[data-lucide] {
 }
 
 .wide-card {
-  grid-column: 1 / -1; /* spans both columns */
+  grid-column: 1 / -1; 
 }
 
 .task-list-preview,
@@ -550,9 +524,7 @@ i[data-lucide] {
   padding: 10px 4px;
 }
 
-/* =========================================================
-   8. WEEKLY CHART (shared between Overview + Progress views)
-========================================================= */
+/* 8. WEEKLY CHART (shared between Overview + Progress views) */
 .week-chart {
   display: flex;
   justify-content: space-between;
@@ -592,9 +564,7 @@ i[data-lucide] {
   font-weight: 700;
 }
 
-/* =========================================================
-   9. TASKS VIEW
-========================================================= */
+/* 9. TASKS VIEW */
 .filter-select, .subject-select {
   padding: 8px 12px;
   border: 1px solid var(--border-color);
@@ -789,9 +759,7 @@ body[data-theme="dark"] .deadline-input {
   padding: 30px 0 10px;
 }
 
-/* =========================================================
-   10. PROGRESS VIEW
-========================================================= */
+/* 10. PROGRESS VIEW */
 .progress-view-grid {
   display: grid;
   grid-template-columns: 1fr 2fr;
@@ -884,9 +852,7 @@ body[data-theme="dark"] .deadline-input {
   text-align: right;
 }
 
-/* =========================================================
-   11. FOCUS VIEW (Pomodoro)
-========================================================= */
+/* 11. FOCUS VIEW (Pomodoro) */
 .pomodoro-card-large {
   max-width: 420px;
   margin: 10px auto 0;
@@ -913,9 +879,7 @@ body[data-theme="dark"] .deadline-input {
   margin-bottom: 26px;
 }
 
-/* Uses the same conic-gradient technique as the overall progress
-   ring, but --progress here represents "time elapsed" so the ring
-   visibly fills as the countdown runs. */
+
 .pomodoro-ring {
   --progress: 0;
   width: 220px;
@@ -1002,8 +966,7 @@ body[data-theme="dark"] .deadline-input {
   outline: none;
 }
 
-/* Chrome/Edge/Safari add spinner arrows to number inputs by default;
-   hiding them keeps this compact pill looking clean. */
+
 .duration-custom-label input::-webkit-outer-spin-button,
 .duration-custom-label input::-webkit-inner-spin-button {
   -webkit-appearance: none;
@@ -1030,9 +993,7 @@ body[data-theme="dark"] .deadline-input {
   font-weight: 600;
 }
 
-/* =========================================================
-   12. BUTTONS
-========================================================= */
+/* 12. BUTTONS */
 .btn {
   display: inline-flex;
   align-items: center;
@@ -1079,9 +1040,7 @@ body[data-theme="dark"] .deadline-input {
   transform: none !important;
 }
 
-/* =========================================================
-   14. RESPONSIVE
-========================================================= */
+/* 14. RESPONSIVE */
 @media (max-width: 980px) {
   .hero-row { grid-template-columns: 1fr; }
   .overview-grid { grid-template-columns: 1fr; }
