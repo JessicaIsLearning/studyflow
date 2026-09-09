@@ -1,0 +1,1361 @@
+/* =========================================================
+   1. FONTS & CSS VARIABLES
+========================================================= */
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+:root {
+  /* Brand palette — a calmer indigo/violet instead of a flat purple,
+     plus a warm amber accent for streaks/highlights so the page
+     doesn't feel monochrome. */
+  --color-primary: #5b5fee;
+  --color-primary-dark: #4548c9;
+  --color-primary-light: #8f92f5;
+  --color-primary-tint: #eef0ff;
+
+  --color-amber: #f5a623;
+  --color-amber-tint: #fef3e2;
+
+  --color-success: #16a37a;
+  --color-success-tint: #e3f7f0;
+  --color-danger: #e15c5c;
+  --color-danger-tint: #fdecec;
+
+  --color-math: #5b5fee;
+  --color-science: #16a37a;
+  --color-history: #e08b3c;
+
+  --bg-body: #f6f6fb;
+  --bg-sidebar: #ffffff;
+  --bg-card: #ffffff;
+  --bg-hover: #f1f1fa;
+  --bg-input: #f7f7fc;
+  --bg-track: #ececf6;
+
+  --text-primary: #1f2033;
+  --text-secondary: #83839c;
+  --text-faint: #b2b2c6;
+  --text-on-primary: #ffffff;
+
+  --border-color: #eaeaf4;
+  --shadow-card: 0 1px 2px rgba(31, 32, 51, 0.04), 0 8px 24px rgba(31, 32, 51, 0.05);
+  --shadow-card-hover: 0 2px 4px rgba(31, 32, 51, 0.05), 0 14px 32px rgba(31, 32, 51, 0.09);
+  --shadow-pop: 0 10px 30px rgba(91, 95, 238, 0.25);
+
+  --radius-sm: 10px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --gap: 20px;
+
+  --transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-medium: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+body[data-theme="dark"] {
+  --bg-body: #14141e;
+  --bg-sidebar: #191926;
+  --bg-card: #1c1c2b;
+  --bg-hover: #24243599;
+  --bg-input: #24243588;
+  --bg-track: #2a2a3d;
+
+  --color-primary-tint: #23234a;
+  --color-amber-tint: #332813;
+  --color-success-tint: #123128;
+  --color-danger-tint: #34191b;
+
+  --text-primary: #f1f1f8;
+  --text-secondary: #9797b3;
+  --text-faint: #5c5c78;
+
+  --border-color: #29293d;
+  --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 24px rgba(0, 0, 0, 0.25);
+  --shadow-card-hover: 0 2px 4px rgba(0, 0, 0, 0.3), 0 14px 32px rgba(0, 0, 0, 0.35);
+}
+
+/* =========================================================
+   2. RESET / BASE
+========================================================= */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Plus Jakarta Sans', "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  background-color: var(--bg-body);
+  color: var(--text-primary);
+  transition: background-color var(--transition-medium), color var(--transition-medium);
+  -webkit-font-smoothing: antialiased;
+}
+
+ul { list-style: none; }
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  background: none;
+  color: inherit;
+}
+
+input, select {
+  font-family: inherit;
+  font-size: 0.92rem;
+  color: inherit;
+}
+
+h1, h2, h3 { letter-spacing: -0.01em; }
+
+/* Lucide icons inherit color and size from their parent by default;
+   this keeps every icon crisp and consistently sized unless a
+   component overrides it. */
+i[data-lucide] {
+  width: 20px;
+  height: 20px;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+/* =========================================================
+   3. APP LAYOUT
+========================================================= */
+.app {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* ---------- Sidebar ---------- */
+.sidebar {
+  width: 232px;
+  flex-shrink: 0;
+  background-color: var(--bg-sidebar);
+  border-right: 1px solid var(--border-color);
+  padding: 26px 18px;
+  display: flex;
+  flex-direction: column;
+  transition: background-color var(--transition-medium);
+}
+
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 36px;
+  padding: 0 10px;
+}
+
+.logo-mark {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark));
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 4px 10px rgba(91, 95, 238, 0.35);
+}
+
+.logo-mark i { width: 18px; height: 18px; }
+
+.logo-text {
+  font-size: 1.15rem;
+  font-weight: 800;
+}
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex-grow: 1;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 11px 14px;
+  border-radius: var(--radius-sm);
+  color: var(--text-secondary);
+  font-weight: 600;
+  font-size: 0.92rem;
+  text-align: left;
+  transition: background-color var(--transition-fast), color var(--transition-fast), transform var(--transition-fast);
+}
+
+.nav-item:hover {
+  background-color: var(--bg-hover);
+  color: var(--text-primary);
+}
+
+.nav-item:active {
+  transform: scale(0.98);
+}
+
+/* Active state: a soft tint rather than a hard solid fill, so it
+   reads as "selected" without shouting. The left accent bar gives
+   a clear, subtle indicator that works in both themes. */
+.nav-item.active {
+  background-color: var(--color-primary-tint);
+  color: var(--color-primary);
+  position: relative;
+}
+
+.nav-item.active::before {
+  content: "";
+  position: absolute;
+  left: -18px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 3px;
+  height: 20px;
+  background-color: var(--color-primary);
+  border-radius: 0 4px 4px 0;
+}
+
+.nav-icon { width: 19px; height: 19px; }
+
+.sidebar-footer {
+  border-top: 1px solid var(--border-color);
+  padding-top: 14px;
+}
+
+.theme-toggle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 10px 14px;
+  border-radius: var(--radius-sm);
+  color: var(--text-secondary);
+  font-weight: 600;
+  font-size: 0.88rem;
+  transition: background-color var(--transition-fast);
+}
+
+.theme-toggle:hover {
+  background-color: var(--bg-hover);
+  color: var(--text-primary);
+}
+
+.theme-icon { width: 17px; height: 17px; }
+
+/* ---------- Main Content ---------- */
+.main-content {
+  flex-grow: 1;
+  padding: 30px 40px 60px;
+  max-width: 1180px;
+}
+
+/* =========================================================
+   4. GREETING
+========================================================= */
+.greeting-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 26px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.greeting-title {
+  font-size: 1.55rem;
+  font-weight: 800;
+  margin-bottom: 3px;
+}
+
+.greeting-subtitle {
+  color: var(--text-secondary);
+  font-size: 0.92rem;
+}
+
+.date-badge {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  padding: 7px 16px;
+  border-radius: 999px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+}
+
+/* =========================================================
+   5. VIEW SWITCHING
+   =========================================================
+   Only one .view is shown at a time. We hide inactive views with
+   display:none (removed from layout entirely) and fade the active
+   one in — a small, calm transition rather than a hard cut.
+========================================================= */
+.view {
+  display: none;
+}
+
+.view.view-active {
+  display: block;
+  animation: fadeIn 0.25s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* =========================================================
+   6. CARD (shared building block)
+========================================================= */
+.card {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  padding: 22px;
+  transition: background-color var(--transition-medium), box-shadow var(--transition-fast), border-color var(--transition-medium);
+}
+
+.card:hover {
+  box-shadow: var(--shadow-card-hover);
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.card h2 {
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.link-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  padding: 4px 6px;
+  border-radius: var(--radius-sm);
+  transition: gap var(--transition-fast), background-color var(--transition-fast);
+}
+
+.link-btn i { width: 14px; height: 14px; }
+
+.link-btn:hover {
+  gap: 9px;
+  background-color: var(--color-primary-tint);
+}
+
+/* =========================================================
+   7. OVERVIEW VIEW
+========================================================= */
+
+/* ---- Hero row ---- */
+.hero-row {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr;
+  gap: var(--gap);
+  margin-bottom: var(--gap);
+}
+
+.hero-card {
+  background: linear-gradient(155deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+  color: #fff;
+  border: none;
+  box-shadow: var(--shadow-pop);
+  display: flex;
+  flex-direction: column;
+}
+
+.hero-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 14px;
+}
+
+.hero-eyebrow {
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  opacity: 0.85;
+}
+
+.hero-icon {
+  width: 30px;
+  height: 30px;
+  border-radius: 9px;
+  background-color: rgba(255, 255, 255, 0.18);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hero-icon i { width: 16px; height: 16px; }
+
+.hero-percent {
+  font-size: 2.6rem;
+  font-weight: 800;
+  line-height: 1;
+  margin-bottom: 14px;
+}
+
+.hero-bar-track {
+  width: 100%;
+  height: 8px;
+  border-radius: 999px;
+  background-color: rgba(255, 255, 255, 0.22);
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+
+.hero-bar-fill {
+  height: 100%;
+  border-radius: 999px;
+  background-color: #ffffff;
+  transition: width var(--transition-medium);
+}
+
+.hero-caption {
+  font-size: 0.85rem;
+  opacity: 0.9;
+}
+
+.streak-card,
+.focus-snapshot-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.streak-icon,
+.focus-snapshot-icon {
+  width: 46px;
+  height: 46px;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.streak-icon {
+  background-color: var(--color-amber-tint);
+  color: var(--color-amber);
+}
+
+.focus-snapshot-icon {
+  background-color: var(--color-primary-tint);
+  color: var(--color-primary);
+}
+
+.streak-value,
+.focus-snapshot-value {
+  font-size: 1.05rem;
+  font-weight: 800;
+  margin-bottom: 2px;
+}
+
+.streak-label,
+.focus-snapshot-label {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  line-height: 1.35;
+}
+
+/* ---- Overview grid: tasks preview + deadlines + week chart ---- */
+.overview-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--gap);
+}
+
+.wide-card {
+  grid-column: 1 / -1; /* spans both columns */
+}
+
+.task-list-preview,
+.deadline-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.task-preview-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+  background-color: var(--bg-input);
+  font-size: 0.88rem;
+}
+
+.task-preview-item.completed {
+  opacity: 0.55;
+}
+
+.task-preview-item.completed span {
+  text-decoration: line-through;
+}
+
+.task-preview-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.deadline-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+  background-color: var(--color-danger-tint);
+  font-size: 0.88rem;
+}
+
+.deadline-icon {
+  color: var(--color-danger);
+  flex-shrink: 0;
+  display: flex;
+}
+
+.deadline-icon i { width: 16px; height: 16px; }
+
+.deadline-item-text {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.deadline-item-when {
+  font-size: 0.74rem;
+  color: var(--color-danger);
+  font-weight: 700;
+}
+
+.filter-with-mini-cat {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.mini-cat {
+  font-size: 1.3rem;
+  display: inline-block;
+  transition: transform 0.3s ease;
+}
+
+.mini-cat.is-happy {
+  animation: miniCatBounce 0.6s ease;
+}
+
+@keyframes miniCatBounce {
+  0% { transform: scale(1) rotate(0deg); }
+  30% { transform: scale(1.3) rotate(-8deg); }
+  60% { transform: scale(1.15) rotate(6deg); }
+  100% { transform: scale(1) rotate(0deg); }
+}
+
+.empty-mini-note {
+  font-size: 0.85rem;
+  color: var(--text-faint);
+  padding: 10px 4px;
+}
+
+/* =========================================================
+   8. WEEKLY CHART (shared between Overview + Progress views)
+========================================================= */
+.week-chart {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  height: 140px;
+  gap: 10px;
+}
+
+.week-bar-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  flex: 1;
+  height: 100%;
+}
+
+.week-bar {
+  width: 100%;
+  max-width: 30px;
+  background: linear-gradient(180deg, var(--color-primary-light), var(--color-primary));
+  border-radius: 8px 8px 3px 3px;
+  transition: height var(--transition-medium);
+  position: relative;
+}
+
+/* Highlights today's bar so the chart tells a small story, not
+   just a row of identical shapes. */
+.week-bar.is-today {
+  background: linear-gradient(180deg, var(--color-amber), #e08b1f);
+}
+
+.week-bar-label {
+  font-size: 0.72rem;
+  color: var(--text-secondary);
+  font-weight: 700;
+}
+
+/* =========================================================
+   9. TASKS VIEW
+========================================================= */
+.filter-select, .subject-select {
+  padding: 8px 12px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  background-color: var(--bg-input);
+}
+
+.add-task-form {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 18px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.task-input {
+  flex-grow: 1;
+  min-width: 140px;
+  padding: 10px 14px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  background-color: var(--bg-input);
+}
+
+.task-input:focus,
+.filter-select:focus,
+.subject-select:focus {
+  outline: 2px solid var(--color-primary-light);
+  outline-offset: 1px;
+}
+
+.important-checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.important-checkbox-label input {
+  accent-color: var(--color-danger);
+}
+
+.deadline-input {
+  padding: 9px 12px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  background-color: var(--bg-input);
+  font-size: 0.85rem;
+  color-scheme: light; /* keeps the native picker icon visible in light mode */
+  transition: opacity var(--transition-fast);
+}
+
+body[data-theme="dark"] .deadline-input {
+  color-scheme: dark;
+}
+
+/* Greyed out until the "Deadline" checkbox is ticked, so it's clear
+   the two controls are linked. */
+.deadline-input:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.task-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.task-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 13px 14px;
+  border-radius: var(--radius-md);
+  background-color: var(--bg-input);
+  transition: background-color var(--transition-fast), opacity var(--transition-fast), transform var(--transition-fast);
+}
+
+.task-checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-grow: 1;
+  cursor: pointer;
+}
+
+/* Custom checkbox: a small circle that fills with a check icon.
+   Native checkboxes are hard to style consistently across browsers,
+   so we hide the real input visually but keep it functional for
+   accessibility, and draw our own circle with CSS. */
+.task-checkbox {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 21px;
+  height: 21px;
+  border-radius: 50%;
+  border: 2px solid var(--border-color);
+  flex-shrink: 0;
+  cursor: pointer;
+  display: grid;
+  place-content: center;
+  transition: background-color var(--transition-fast), border-color var(--transition-fast), transform var(--transition-fast);
+}
+
+.task-checkbox::before {
+  content: "";
+  width: 10px;
+  height: 10px;
+  transform: scale(0);
+  transition: transform var(--transition-fast);
+  border-radius: 2px;
+  background-color: #fff;
+  clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+}
+
+.task-checkbox:checked {
+  background-color: var(--color-success);
+  border-color: var(--color-success);
+}
+
+.task-checkbox:checked::before {
+  transform: scale(1.4);
+}
+
+.task-checkbox:active {
+  transform: scale(0.9);
+}
+
+.task-text {
+  font-size: 0.92rem;
+  transition: color var(--transition-fast);
+}
+
+.task-item.completed {
+  opacity: 0.55;
+}
+
+.task-item.completed .task-text {
+  text-decoration: line-through;
+  color: var(--text-secondary);
+}
+
+.task-tag {
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 999px;
+  color: #ffffff;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.tag-math { background-color: var(--color-math); }
+.tag-science { background-color: var(--color-science); }
+.tag-history { background-color: var(--color-history); }
+
+.deadline-flag {
+  color: var(--color-danger);
+  flex-shrink: 0;
+  display: flex;
+}
+
+.deadline-flag i { width: 15px; height: 15px; }
+
+.task-delete-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  color: var(--text-faint);
+  border-radius: var(--radius-sm);
+  transition: background-color var(--transition-fast), color var(--transition-fast);
+  flex-shrink: 0;
+}
+
+.task-delete-btn i { width: 16px; height: 16px; }
+
+.task-delete-btn:hover {
+  background-color: var(--color-danger-tint);
+  color: var(--color-danger);
+}
+
+.empty-state {
+  text-align: center;
+  color: var(--text-faint);
+  font-size: 0.9rem;
+  padding: 30px 0 10px;
+}
+
+/* =========================================================
+   10. PROGRESS VIEW
+========================================================= */
+.progress-view-grid {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: var(--gap);
+}
+
+.progress-card {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.progress-ring-wrapper {
+  display: flex;
+  justify-content: center;
+  margin: 18px 0;
+}
+
+.progress-ring {
+  --progress: 0;
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  background: conic-gradient(var(--color-primary) calc(var(--progress) * 1%), var(--bg-track) 0);
+  transition: background var(--transition-medium);
+}
+
+.progress-ring::before {
+  content: "";
+  position: absolute;
+  width: 112px;
+  height: 112px;
+  border-radius: 50%;
+  background-color: var(--bg-card);
+}
+
+.progress-ring-value {
+  position: relative;
+  font-size: 1.5rem;
+  font-weight: 800;
+  z-index: 1;
+}
+
+.progress-caption {
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+}
+
+.subject-progress-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.subject-progress-row {
+  display: grid;
+  grid-template-columns: 90px 1fr 42px;
+  align-items: center;
+  gap: 12px;
+}
+
+.subject-progress-name {
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.subject-progress-track {
+  height: 8px;
+  border-radius: 999px;
+  background-color: var(--bg-track);
+  overflow: hidden;
+}
+
+.subject-progress-fill {
+  height: 100%;
+  border-radius: 999px;
+  transition: width var(--transition-medium);
+}
+
+.subject-progress-percent {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+  text-align: right;
+}
+
+/* =========================================================
+   11. FOCUS VIEW (Pomodoro)
+========================================================= */
+.pomodoro-card-large {
+  max-width: 420px;
+  margin: 10px auto 0;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px 30px;
+}
+
+.pomodoro-mode-badge {
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-primary);
+  background-color: var(--color-primary-tint);
+  padding: 6px 14px;
+  border-radius: 999px;
+  margin-bottom: 24px;
+}
+
+.pomodoro-ring-wrapper {
+  margin-bottom: 26px;
+}
+
+/* Uses the same conic-gradient technique as the overall progress
+   ring, but --progress here represents "time elapsed" so the ring
+   visibly fills as the countdown runs. */
+.pomodoro-ring {
+  --progress: 0;
+  width: 220px;
+  height: 220px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  background: conic-gradient(var(--color-primary) calc(var(--progress) * 1%), var(--bg-track) 0);
+  transition: background 0.6s linear;
+}
+
+.pomodoro-ring::before {
+  content: "";
+  position: absolute;
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  background-color: var(--bg-card);
+}
+
+.pomodoro-display {
+  position: relative;
+  font-size: 2.6rem;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  z-index: 1;
+}
+
+.duration-picker {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 22px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.duration-btn {
+  padding: 8px 16px;
+  border-radius: 999px;
+  border: 1px solid var(--border-color);
+  background-color: var(--bg-input);
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+  transition: background-color var(--transition-fast), color var(--transition-fast), border-color var(--transition-fast);
+}
+
+.duration-btn:hover {
+  background-color: var(--bg-hover);
+}
+
+.duration-btn.active {
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
+  color: #fff;
+}
+
+.duration-custom-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--border-color);
+  background-color: var(--bg-input);
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.duration-custom-label input {
+  width: 52px;
+  border: none;
+  background: transparent;
+  font-weight: 700;
+  color: var(--text-primary);
+  text-align: right;
+}
+
+.duration-custom-label input:focus {
+  outline: none;
+}
+
+/* Chrome/Edge/Safari add spinner arrows to number inputs by default;
+   hiding them keeps this compact pill looking clean. */
+.duration-custom-label input::-webkit-outer-spin-button,
+.duration-custom-label input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.pomodoro-controls {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 18px;
+  flex-wrap: wrap;
+}
+
+.pomodoro-caption {
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  margin-bottom: 4px;
+}
+
+.pomodoro-session-count {
+  color: var(--text-faint);
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+/* =========================================================
+   12. BUTTONS
+========================================================= */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 10px 20px;
+  border-radius: var(--radius-sm);
+  font-weight: 700;
+  font-size: 0.88rem;
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast), background-color var(--transition-fast), opacity var(--transition-fast);
+}
+
+.btn i { width: 16px; height: 16px; }
+
+.btn:active { transform: scale(0.96); }
+
+.btn-primary {
+  background-color: var(--color-primary);
+  color: var(--text-on-primary);
+}
+
+.btn-primary:hover {
+  background-color: var(--color-primary-dark);
+  box-shadow: 0 4px 14px rgba(91, 95, 238, 0.35);
+}
+
+.btn-secondary {
+  background-color: var(--bg-hover);
+  color: var(--text-primary);
+}
+
+.btn-secondary:hover { background-color: var(--border-color); }
+
+.btn-ghost {
+  background-color: transparent;
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+}
+
+.btn-ghost:hover { background-color: var(--bg-hover); }
+
+.btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+/* =========================================================
+   14. CAT MASCOT
+   =========================================================
+   The whole cat is built from plain <div>s shaped with
+   border-radius, positioning, and CSS transforms — no image
+   files, no SVG, no external library. Each part (ears, eyes,
+   whiskers, tail) is a small shape positioned absolutely inside
+   a relatively-positioned .cat container.
+
+   States (controlled by JS adding/removing classes on #cat):
+   - default:  idle, gentle breathing + tail sway loop
+   - .eating:  plays a quick "chomp" animation when a treat lands
+   - .happy:   eyes turn into closed happy curves, cat bounces
+========================================================= */
+.cat-scene {
+  margin-top: 28px;
+  padding-top: 24px;
+  border-top: 1px dashed var(--border-color);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  min-height: 150px;
+}
+
+.cat {
+  position: relative;
+  width: 96px;
+  height: 84px;
+  background-color: #f2b880;
+  border-radius: 48% 48% 44% 44% / 58% 58% 42% 42%;
+  animation: catBreathe 3.2s ease-in-out infinite;
+  transition: transform 0.3s ease;
+}
+
+body[data-theme="dark"] .cat {
+  background-color: #d9a06e;
+}
+
+@keyframes catBreathe {
+  0%, 100% { transform: scaleY(1); }
+  50% { transform: scaleY(1.03); }
+}
+
+.cat-ears {
+  position: absolute;
+  top: -22px;
+  left: 0;
+  width: 100%;
+}
+
+.cat-ear {
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-left: 16px solid transparent;
+  border-right: 16px solid transparent;
+  border-bottom: 26px solid #f2b880;
+}
+
+body[data-theme="dark"] .cat-ear {
+  border-bottom-color: #d9a06e;
+}
+
+.cat-ear-left { left: 8px; transform: rotate(-12deg); }
+.cat-ear-right { right: 8px; transform: rotate(12deg); }
+
+/* Inner pink of the ears, layered on top using ::after */
+.cat-ear::after {
+  content: "";
+  position: absolute;
+  top: 9px;
+  left: -10px;
+  width: 0;
+  height: 0;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-bottom: 14px solid #ffcfd9;
+}
+
+.cat-face {
+  position: absolute;
+  top: 26px;
+  left: 0;
+  width: 100%;
+  height: 40px;
+}
+
+.cat-eye {
+  position: absolute;
+  top: 6px;
+  width: 9px;
+  height: 11px;
+  background-color: #2d2233;
+  border-radius: 50%;
+  transition: height 0.2s ease, border-radius 0.2s ease, top 0.2s ease;
+}
+
+.cat-eye-left { left: 27px; }
+.cat-eye-right { right: 27px; }
+
+.cat-mouth {
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 14px;
+  height: 7px;
+  border-bottom: 2px solid #7a5240;
+  border-left: 2px solid #7a5240;
+  border-right: 2px solid #7a5240;
+  border-radius: 0 0 10px 10px;
+  border-top: none;
+  opacity: 0.8;
+}
+
+.cat-whiskers {
+  position: absolute;
+  top: 15px;
+  width: 20px;
+  height: 12px;
+}
+
+.cat-whiskers::before,
+.cat-whiskers::after {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 1.5px;
+  background-color: #c99a76;
+}
+
+.cat-whiskers::before { top: 2px; }
+.cat-whiskers::after { top: 8px; }
+
+.cat-whiskers-left { left: -14px; }
+.cat-whiskers-right { right: -14px; }
+
+.cat-blush {
+  position: absolute;
+  top: 20px;
+  width: 10px;
+  height: 6px;
+  background-color: #ffb3c1;
+  border-radius: 50%;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.cat-blush-left { left: 14px; }
+.cat-blush-right { right: 14px; }
+
+.cat-tail {
+  position: absolute;
+  bottom: 6px;
+  right: -14px;
+  width: 10px;
+  height: 40px;
+  background-color: #f2b880;
+  border-radius: 20px;
+  transform-origin: top center;
+  animation: catTailSway 2.4s ease-in-out infinite;
+}
+
+body[data-theme="dark"] .cat-tail {
+  background-color: #d9a06e;
+}
+
+@keyframes catTailSway {
+  0%, 100% { transform: rotate(8deg); }
+  50% { transform: rotate(-8deg); }
+}
+
+/* ---- Happy state: triggered briefly after eating a treat ---- */
+.cat.happy {
+  animation: catHappyBounce 0.7s ease;
+}
+
+.cat.happy .cat-eye {
+  height: 2px;
+  top: 10px;
+  border-radius: 2px;
+}
+
+.cat.happy .cat-blush {
+  opacity: 1;
+}
+
+@keyframes catHappyBounce {
+  0% { transform: translateY(0) scale(1); }
+  30% { transform: translateY(-14px) scale(1.06); }
+  55% { transform: translateY(0) scale(0.98); }
+  75% { transform: translateY(-5px) scale(1.02); }
+  100% { transform: translateY(0) scale(1); }
+}
+
+/* ---- The fish treat that flies down when a task is completed ---- */
+.fish-treat {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  font-size: 1.6rem;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.fish-treat.drop {
+  animation: fishDrop 0.9s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes fishDrop {
+  0% { opacity: 0; transform: translate(-50%, -10px) scale(0.6) rotate(0deg); }
+  15% { opacity: 1; }
+  70% { opacity: 1; transform: translate(-50%, 46px) scale(1) rotate(20deg); }
+  100% { opacity: 0; transform: translate(-50%, 52px) scale(0.7) rotate(20deg); }
+}
+
+.cat-caption {
+  margin-top: 14px;
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  font-weight: 600;
+  text-align: center;
+  min-height: 1.2em;
+}
+
+/* =========================================================
+   15. RESPONSIVE
+========================================================= */
+@media (max-width: 980px) {
+  .hero-row { grid-template-columns: 1fr; }
+  .overview-grid { grid-template-columns: 1fr; }
+  .progress-view-grid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 640px) {
+  .app { flex-direction: column; }
+
+  .sidebar {
+    width: 100%;
+    flex-direction: row;
+    align-items: center;
+    padding: 12px 16px;
+    overflow-x: auto;
+  }
+
+  .sidebar-header { margin-bottom: 0; margin-right: 10px; }
+  .sidebar-nav { flex-direction: row; flex-grow: 0; }
+  .nav-item.active::before { display: none; }
+  .nav-label { display: none; }
+  .sidebar-footer { border-top: none; padding-top: 0; margin-left: auto; }
+  .theme-label { display: none; }
+
+  .main-content { padding: 18px; }
+  .add-task-form { flex-direction: column; align-items: stretch; }
+  .subject-progress-row { grid-template-columns: 70px 1fr 36px; }
+}
