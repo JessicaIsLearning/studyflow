@@ -7,21 +7,14 @@
 
   <link rel="stylesheet" href="style.css">
 
-  <!-- Lucide is a free, open-source icon library. This single script tag
-       gives us access to clean, consistent line-icons (no more emoji).
-       We call lucide.createIcons() at the bottom of script.js to turn
-       <i data-lucide="..."> tags into real SVG icons. -->
+
   <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
 </head>
 <body>
 
   <div class="app">
 
-    <!-- ============================================
-         SIDEBAR / NAVIGATION
-         Each nav item has a data-view attribute. JS reads this
-         to know which <section data-view="..."> to show.
-    ============================================= -->
+    <!-- SIDEBAR / NAVIGATION -->
     <aside class="sidebar">
       <div class="sidebar-header">
         <span class="logo-mark"><i data-lucide="flame"></i></span>
@@ -55,12 +48,7 @@
       </div>
     </aside>
 
-    <!-- ============================================
-         MAIN CONTENT
-         Contains FOUR <section data-view="..."> blocks — one per
-         nav item. JS shows exactly one at a time by toggling a
-         "view-active" class; the rest stay hidden with CSS.
-    ============================================= -->
+    <!-- MAIN CONTENT -->
     <main class="main-content">
 
       <header class="greeting-section">
@@ -71,12 +59,7 @@
         <div class="date-badge" id="dateBadge">Wednesday, Sep 9</div>
       </header>
 
-      <!-- =======================================================
-           VIEW 1: OVERVIEW
-           A scannable summary rather than equal-sized cards:
-           a hero progress strip, today's tasks preview, an
-           upcoming-deadlines list, and a focus snapshot.
-      ======================================================== -->
+      <!-- VIEW 1: OVERVIEW -->
       <section class="view view-active" data-view="overview">
 
         <!-- Hero row: big progress number + streak + quick stats -->
@@ -148,10 +131,7 @@
         </div>
       </section>
 
-      <!-- =======================================================
-           VIEW 2: TASKS
-           The full task manager: add, filter, complete, delete.
-      ======================================================== -->
+      <!-- VIEW 2: TASKS The full task manager: add, filter, complete, delete. -->
       <section class="view" data-view="tasks">
         <div class="card">
           <div class="card-header">
@@ -199,11 +179,7 @@
         </div>
       </section>
 
-      <!-- =======================================================
-           VIEW 3: PROGRESS
-           Progress ring + weekly chart, larger versions for
-           focused review.
-      ======================================================== -->
+      <!--  VIEW 3: PROGRESS Progress ring + weekly chart, larger versions for focused review.-->
       <section class="view" data-view="progress">
         <div class="progress-view-grid">
           <div class="card progress-card">
@@ -236,10 +212,8 @@
         </div>
       </section>
 
-      <!-- =======================================================
-           VIEW 4: FOCUS
-           The Pomodoro timer, given room to be the main event.
-      ======================================================== -->
+      <!-- VIEW 4: 
+       FOCUS The Pomodoro timer, given room to be the main event. -->
       <section class="view" data-view="focus">
         <div class="card pomodoro-card-large">
           <span class="pomodoro-mode-badge" id="pomodoroModeBadge">Focus Session</span>
