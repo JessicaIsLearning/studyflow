@@ -39,8 +39,8 @@
   --radius-lg: 24px;
   --gap: 20px;
 
-  --transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
-  --transition-medium: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-fast: 0.15s ease;
+  --transition-medium: 0.3s ease;
 }
 
 body[data-theme="dark"] {
@@ -76,7 +76,6 @@ body {
   background-color: var(--bg-body);
   color: var(--text-primary);
   transition: background-color var(--transition-medium), color var(--transition-medium);
-  -webkit-font-smoothing: antialiased;
 }
 
 ul { list-style: none; }
@@ -598,7 +597,6 @@ body[data-theme="dark"] .deadline-input {
    hide the real input visually and draw our own circle with CSS. */
 .task-checkbox {
   appearance: none;
-  -webkit-appearance: none;
   width: 21px;
   height: 21px;
   border-radius: 50%;
@@ -612,13 +610,12 @@ body[data-theme="dark"] .deadline-input {
 
 .task-checkbox::before {
   content: "";
-  width: 10px;
-  height: 10px;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background-color: #fff;
   transform: scale(0);
   transition: transform var(--transition-fast);
-  border-radius: 2px;
-  background-color: #fff;
-  clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
 }
 
 .task-checkbox:checked {
@@ -893,14 +890,6 @@ body[data-theme="dark"] .deadline-input {
   outline: none;
 }
 
-/* Chrome/Edge/Safari add spinner arrows to number inputs by default;
-   hiding them keeps this compact pill looking clean. */
-.duration-custom-label input::-webkit-outer-spin-button,
-.duration-custom-label input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-
 .pomodoro-controls {
   display: flex;
   justify-content: center;
@@ -965,7 +954,7 @@ body[data-theme="dark"] .deadline-input {
 .btn:disabled {
   opacity: 0.45;
   cursor: not-allowed;
-  transform: none !important;
+  transform: none;
 }
 
 /* Responsive */

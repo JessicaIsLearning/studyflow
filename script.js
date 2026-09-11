@@ -344,15 +344,18 @@ document.addEventListener("DOMContentLoaded", () => {
     const text = taskInput.value.trim();
     if (text === "") return;
 
+    // Only store a deadline if "Deadline" is checked AND a date was picked.
+    let deadline = null;
+    if (importantInput.checked && deadlineInput.value) {
+      deadline = deadlineInput.value;
+    }
+
     const newTask = {
       id: Date.now(), // a quick way to get a unique number
       text,
       subject: subjectSelect.value,
       important: importantInput.checked,
-      // Only keep a deadline value if the checkbox is on AND a date
-      // was actually picked — otherwise store null so we can tell
-      // "no deadline" apart from "deadline not filled in yet".
-      deadline: importantInput.checked && deadlineInput.value ? deadlineInput.value : null,
+      deadline,
       completed: false,
     };
 
