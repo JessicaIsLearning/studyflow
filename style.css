@@ -262,7 +262,6 @@ i[data-lucide] {
   color: var(--text-secondary);
 }
 
-/* View switching: only one .view shown at a time */
 .view {
   display: none;
 }
@@ -556,7 +555,7 @@ i[data-lucide] {
   border-radius: var(--radius-sm);
   background-color: var(--bg-input);
   font-size: 0.85rem;
-  color-scheme: light; /* keeps the native picker icon visible in light mode */
+  color-scheme: light;
   transition: opacity var(--transition-fast);
 }
 
@@ -820,7 +819,7 @@ body[data-theme="dark"] .deadline-input {
 .pomodoro-ring {
   --ring-size: 220px;
   --ring-hole-size: 180px;
-  transition: background 0.6s linear; /* slower, steadier tick than the default */
+  transition: background 0.6s linear;
 }
 
 .pomodoro-display {

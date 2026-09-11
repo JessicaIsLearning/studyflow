@@ -1,5 +1,4 @@
 document.addEventListener("DOMContentLoaded", () => {
-
   function renderIcons() {
     if (window.lucide) lucide.createIcons();
   }
@@ -16,11 +15,46 @@ document.addEventListener("DOMContentLoaded", () => {
     activeView: "overview",
     focusSessionsToday: 0,
     tasks: [
-      { id: 1, text: "Finish algebra worksheet", subject: "math", important: false, deadline: null, completed: true },
-      { id: 2, text: "Read chapter 4 on cell biology", subject: "science", important: true, deadline: "2026-09-11T23:59", completed: false },
-      { id: 3, text: "Review WWII timeline notes", subject: "history", important: true, deadline: "2026-09-10T09:00", completed: false },
-      { id: 4, text: "Practice 10 flashcards", subject: "math", important: false, deadline: null, completed: true },
-      { id: 5, text: "Watch photosynthesis video", subject: "science", important: false, deadline: null, completed: true },
+      {
+        id: 1,
+        text: "Finish algebra worksheet",
+        subject: "math",
+        important: false,
+        deadline: null,
+        completed: true,
+      },
+      {
+        id: 2,
+        text: "Read chapter 4 on cell biology",
+        subject: "science",
+        important: true,
+        deadline: "2026-09-11T23:59",
+        completed: false,
+      },
+      {
+        id: 3,
+        text: "Review WWII timeline notes",
+        subject: "history",
+        important: true,
+        deadline: "2026-09-10T09:00",
+        completed: false,
+      },
+      {
+        id: 4,
+        text: "Practice 10 flashcards",
+        subject: "math",
+        important: false,
+        deadline: null,
+        completed: true,
+      },
+      {
+        id: 5,
+        text: "Watch photosynthesis video",
+        subject: "science",
+        important: false,
+        deadline: null,
+        completed: true,
+      },
     ],
     pomodoroMinutes: 25,
   };
@@ -32,7 +66,10 @@ document.addEventListener("DOMContentLoaded", () => {
     try {
       return { ...structuredClone(defaultState), ...JSON.parse(saved) };
     } catch (error) {
-      console.warn("Couldn't read saved StudyFlow data, starting fresh.", error);
+      console.warn(
+        "Couldn't read saved StudyFlow data, starting fresh.",
+        error,
+      );
       return structuredClone(defaultState);
     }
   }
@@ -42,7 +79,6 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   let state = loadState();
-
 
   // Elements
   const navItems = document.querySelectorAll(".nav-item");
@@ -92,7 +128,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const customMinutesInput = document.getElementById("customMinutesInput");
   const timerEndSound = document.getElementById("timerEndSound");
 
-
   // Greeting / date-time
   function timeOfDayGreeting(hour) {
     if (hour < 5) return "Good night";
@@ -106,19 +141,21 @@ document.addEventListener("DOMContentLoaded", () => {
 
     greetingTitle.textContent = timeOfDayGreeting(now.getHours());
 
-    dateBadge.textContent = now.toLocaleDateString(undefined, {
-      weekday: "long",
-      month: "short",
-      day: "numeric",
-    }) + " · " + now.toLocaleTimeString(undefined, {
-      hour: "numeric",
-      minute: "2-digit",
-    });
+    dateBadge.textContent =
+      now.toLocaleDateString(undefined, {
+        weekday: "long",
+        month: "short",
+        day: "numeric",
+      }) +
+      " · " +
+      now.toLocaleTimeString(undefined, {
+        hour: "numeric",
+        minute: "2-digit",
+      });
   }
 
   renderDateTime();
   setInterval(renderDateTime, 60 * 1000);
-
 
   // Navigation
   function showView(viewName) {
@@ -141,7 +178,6 @@ document.addEventListener("DOMContentLoaded", () => {
   document.querySelectorAll("[data-goto]").forEach((btn) => {
     btn.addEventListener("click", () => showView(btn.dataset.goto));
   });
-
 
   // Tasks
   function subjectLabel(subject) {
@@ -186,7 +222,7 @@ document.addEventListener("DOMContentLoaded", () => {
   function renderTaskList() {
     const filter = filterSelect.value;
     const visibleTasks = state.tasks.filter(
-      (task) => filter === "all" || task.subject === filter
+      (task) => filter === "all" || task.subject === filter,
     );
 
     taskList.innerHTML = visibleTasks.map(taskItemHTML).join("");
@@ -203,14 +239,17 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    taskPreviewList.innerHTML = previewTasks.map((task) => `
+    taskPreviewList.innerHTML = previewTasks
+      .map(
+        (task) => `
       <li class="task-preview-item ${task.completed ? "completed" : ""}">
         <span class="task-preview-dot tag-${task.subject}"></span>
         <span>${task.text}</span>
       </li>
-    `).join("");
+    `,
+      )
+      .join("");
   }
-
 
   function renderDeadlines() {
     const deadlines = state.tasks
@@ -226,9 +265,10 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    deadlineList.innerHTML = deadlines.map((task) => {
-      const when = formatDeadline(task.deadline);
-      return `
+    deadlineList.innerHTML = deadlines
+      .map((task) => {
+        const when = formatDeadline(task.deadline);
+        return `
         <li class="deadline-item">
           <span class="deadline-icon"><i data-lucide="alert-circle"></i></span>
           <span class="deadline-item-text">
@@ -237,7 +277,8 @@ document.addEventListener("DOMContentLoaded", () => {
           </span>
         </li>
       `;
-    }).join("");
+      })
+      .join("");
 
     renderIcons();
   }
@@ -272,14 +313,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Progress by subject (Progress view)
     const subjects = ["math", "science", "history"];
-    subjectProgressList.innerHTML = subjects.map((subject) => {
-      const subjectTasks = state.tasks.filter((t) => t.subject === subject);
-      const subjectDone = subjectTasks.filter((t) => t.completed).length;
-      const subjectPercent = subjectTasks.length === 0
-        ? 0
-        : Math.round((subjectDone / subjectTasks.length) * 100);
+    subjectProgressList.innerHTML = subjects
+      .map((subject) => {
+        const subjectTasks = state.tasks.filter((t) => t.subject === subject);
+        const subjectDone = subjectTasks.filter((t) => t.completed).length;
+        const subjectPercent =
+          subjectTasks.length === 0
+            ? 0
+            : Math.round((subjectDone / subjectTasks.length) * 100);
 
-      return `
+        return `
         <div class="subject-progress-row">
           <span class="subject-progress-name">${subjectLabel(subject)}</span>
           <div class="subject-progress-track">
@@ -288,9 +331,9 @@ document.addEventListener("DOMContentLoaded", () => {
           <span class="subject-progress-percent">${subjectPercent}%</span>
         </div>
       `;
-    }).join("");
+      })
+      .join("");
   }
-
 
   function renderEverythingTaskRelated() {
     renderTaskList();
@@ -336,7 +379,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     const newTask = {
-      id: Date.now(), 
+      id: Date.now(),
       text,
       subject: subjectSelect.value,
       important: importantInput.checked,
@@ -355,7 +398,7 @@ document.addEventListener("DOMContentLoaded", () => {
     taskInput.focus();
   });
 
-  // ---- Filtering ----
+  // Filtering
   filterSelect.addEventListener("change", renderTaskList);
 
   importantInput.addEventListener("change", () => {
@@ -364,7 +407,6 @@ document.addEventListener("DOMContentLoaded", () => {
       deadlineInput.value = "";
     }
   });
-
 
   // Pomodoro
   let totalSeconds = state.pomodoroMinutes * 60;
@@ -380,7 +422,9 @@ document.addEventListener("DOMContentLoaded", () => {
   function renderTimer() {
     pomodoroDisplay.textContent = formatTime(secondsRemaining);
 
-    const elapsedPercent = Math.round(((totalSeconds - secondsRemaining) / totalSeconds) * 100);
+    const elapsedPercent = Math.round(
+      ((totalSeconds - secondsRemaining) / totalSeconds) * 100,
+    );
     pomodoroRing.style.setProperty("--progress", elapsedPercent);
   }
 
@@ -422,12 +466,12 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!minutes || minutes < 1) return;
 
     setActiveButton(durationPicker.querySelectorAll(".duration-btn"), null);
-    setDuration(Math.min(minutes, 180)); 
+    setDuration(Math.min(minutes, 180));
   });
 
   startBtn.addEventListener("click", () => {
     if (timerId !== null) return;
-    if (secondsRemaining <= 0) return; 
+    if (secondsRemaining <= 0) return;
     setTimerButtonsRunning(true);
 
     timerId = setInterval(() => {
@@ -463,7 +507,6 @@ document.addEventListener("DOMContentLoaded", () => {
     renderTimer();
   });
 
-
   // Theme
   function applyTheme(theme) {
     state.theme = theme;
@@ -478,7 +521,7 @@ document.addEventListener("DOMContentLoaded", () => {
       themeLabel.textContent = "Dark Mode";
     }
 
-    renderIcons(); 
+    renderIcons();
     saveState();
   }
 
@@ -486,14 +529,15 @@ document.addEventListener("DOMContentLoaded", () => {
     applyTheme(state.theme === "dark" ? "light" : "dark");
   });
 
-
   // Initial render
   applyTheme(state.theme);
   showView(state.activeView);
   renderEverythingTaskRelated();
 
   const savedMinutes = state.pomodoroMinutes;
-  const matchingPreset = durationPicker.querySelector(`[data-minutes="${savedMinutes}"]`);
+  const matchingPreset = durationPicker.querySelector(
+    `[data-minutes="${savedMinutes}"]`,
+  );
   if (matchingPreset) {
     matchingPreset.classList.add("active");
   } else {
@@ -504,5 +548,4 @@ document.addEventListener("DOMContentLoaded", () => {
   renderTimer();
   setTimerButtonsRunning(false);
   renderIcons();
-
 });
