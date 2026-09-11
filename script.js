@@ -1,37 +1,23 @@
-// =========================================================
 // StudyFlow — script.js
-// =========================================================
-// All app data lives in one `state` object. Any change follows the
-// same pattern: update state -> saveState() -> re-render the affected UI.
-// =========================================================
+// All app data lives in one `state` object: update state -> saveState() -> re-render.
 
 document.addEventListener("DOMContentLoaded", () => {
 
-  // Turns Lucide's <i data-lucide="..."> placeholders into real SVG icons.
-  // Called again after building new HTML, since new icon tags need it too.
   function renderIcons() {
     if (window.lucide) lucide.createIcons();
   }
 
-  // "1 session" vs "2 sessions" — used in a few places below.
   function pluralize(count, word) {
     return `${count} ${word}${count === 1 ? "" : "s"}`;
   }
 
-  // =======================================================
-  // 1. STATE + PERSISTENCE
-  // =======================================================
-
+  // State
   const STORAGE_KEY = "studyflow-state-v1";
 
-  // Used only the very first time someone opens the app (before
-  // anything is saved to localStorage yet).
   const defaultState = {
     theme: "light",
     activeView: "overview",
-    weekProgress: [40, 70, 55, 90, 30, 20, 10], // Mon -> Sun, percent studied
     focusSessionsToday: 0,
-    streakDays: 4,
     tasks: [
       { id: 1, text: "Finish algebra worksheet", subject: "math", important: false, deadline: null, completed: true },
       { id: 2, text: "Read chapter 4 on cell biology", subject: "science", important: true, deadline: "2026-09-11T23:59", completed: false },
@@ -39,13 +25,10 @@ document.addEventListener("DOMContentLoaded", () => {
       { id: 4, text: "Practice 10 flashcards", subject: "math", important: false, deadline: null, completed: true },
       { id: 5, text: "Watch photosynthesis video", subject: "science", important: false, deadline: null, completed: true },
     ],
-    // How many minutes the Focus timer should run for. Saved so the
-    // chosen duration is remembered across visits, same as everything else.
     pomodoroMinutes: 25,
   };
 
-  // Loads saved state, merging it over the defaults so any newly
-  // added fields are still present for users with older saved data.
+  // Merges saved data over the defaults so new fields survive old saves.
   function loadState() {
     const saved = localStorage.getItem(STORAGE_KEY);
     if (!saved) return structuredClone(defaultState);
@@ -65,9 +48,7 @@ document.addEventListener("DOMContentLoaded", () => {
   let state = loadState();
 
 
-  // =======================================================
-  // 2. GRABBING ELEMENTS
-  // =======================================================
+  // Elements
   const navItems = document.querySelectorAll(".nav-item");
   const views = document.querySelectorAll(".view");
 
@@ -83,11 +64,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const heroPercent = document.getElementById("heroPercent");
   const heroBarFill = document.getElementById("heroBarFill");
   const heroCaption = document.getElementById("heroCaption");
-  const streakValue = document.getElementById("streakValue");
   const focusSnapshotValue = document.getElementById("focusSnapshotValue");
   const taskPreviewList = document.getElementById("taskPreviewList");
   const deadlineList = document.getElementById("deadlineList");
-  const weekChart = document.getElementById("weekChart");
 
   // Tasks
   const taskList = document.getElementById("taskList");
@@ -103,7 +82,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const progressRing = document.getElementById("progressRing");
   const progressRingValue = document.getElementById("progressRingValue");
   const progressCaption = document.getElementById("progressCaption");
-  const weekChartLarge = document.getElementById("weekChartLarge");
   const subjectProgressList = document.getElementById("subjectProgressList");
 
   // Focus / Pomodoro
@@ -119,11 +97,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const timerEndSound = document.getElementById("timerEndSound");
 
 
-  // =======================================================
-  // 2b. LIVE DATE / TIME (greeting + date badge)
-  // =======================================================
-  // Reads the real system clock instead of any hardcoded date, and
-  // refreshes once a minute so it stays accurate on a long-open tab.
+  // Greeting / date-time
   function timeOfDayGreeting(hour) {
     if (hour < 5) return "Good night";
     if (hour < 12) return "Good morning";
@@ -146,20 +120,11 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Monday=0 ... Sunday=6, matching the order used by weekProgress/dayLabels
-  // below. JavaScript's own now.getDay() is Sunday=0, so we convert it.
-  function todayWeekIndex(now) {
-    const jsDay = now.getDay(); // 0 (Sun) - 6 (Sat)
-    return jsDay === 0 ? 6 : jsDay - 1;
-  }
-
   renderDateTime();
   setInterval(renderDateTime, 60 * 1000);
 
 
-  // =======================================================
-  // 3. VIEW SWITCHING (sidebar navigation)
-  // =======================================================
+  // Navigation
   function showView(viewName) {
     state.activeView = viewName;
     saveState();
@@ -183,10 +148,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
 
-  // =======================================================
-  // 4. TASKS: rendering, add, delete, complete, filter
-  // =======================================================
-
+  // Tasks
   function subjectLabel(subject) {
     return subject.charAt(0).toUpperCase() + subject.slice(1);
   }
@@ -291,8 +253,7 @@ document.addEventListener("DOMContentLoaded", () => {
     renderIcons();
   }
 
-  // Recalculates every number derived from the task list: the hero
-  // percentage, the progress ring, and the subject breakdown.
+  // Progress
   function renderProgressNumbers() {
     const total = state.tasks.length;
     const done = state.tasks.filter((t) => t.completed).length;
@@ -317,8 +278,7 @@ document.addEventListener("DOMContentLoaded", () => {
       greetingSubtitle.textContent = "You're making steady progress today.";
     }
 
-    // Streak + focus snapshot text
-    streakValue.textContent = `${state.streakDays}-day streak`;
+    // Focus snapshot text
     focusSnapshotValue.textContent = `${pluralize(state.focusSessionsToday, "session")} today`;
     pomodoroSessionCount.textContent = `${pluralize(state.focusSessionsToday, "session")} completed today`;
 
@@ -352,12 +312,7 @@ document.addEventListener("DOMContentLoaded", () => {
     renderProgressNumbers();
   }
 
-  // ---- Event delegation for checkboxes + delete buttons ----
-  // Rather than attaching a listener to every single task (which
-  // would need re-attaching every time we re-render), we attach
-  // ONE listener to the whole list and figure out which task was
-  // clicked using event.target. This is called "event delegation"
-  // and is a common pattern once lists can change dynamically.
+  // Event delegation: one listener on the list instead of one per task.
   taskList.addEventListener("change", (event) => {
     if (!event.target.classList.contains("task-checkbox")) return;
 
@@ -383,7 +338,6 @@ document.addEventListener("DOMContentLoaded", () => {
     renderEverythingTaskRelated();
   });
 
-  // ---- Adding a new task ----
   addTaskForm.addEventListener("submit", (event) => {
     event.preventDefault();
 
@@ -427,34 +381,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
 
-  // =======================================================
-  // 5. WEEKLY CHART (renders into both Overview + Progress views)
-  // =======================================================
-  const dayLabels = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
-
-  function weekChartHTML() {
-    const todayIndex = todayWeekIndex(new Date());
-
-    return state.weekProgress.map((value, index) => `
-      <div class="week-bar-wrapper">
-        <div class="week-bar ${index === todayIndex ? "is-today" : ""}" style="height: ${value}%;"></div>
-        <span class="week-bar-label">${dayLabels[index]}</span>
-      </div>
-    `).join("");
-  }
-
-  function renderWeekCharts() {
-    const html = weekChartHTML();
-    weekChart.innerHTML = html;
-    weekChartLarge.innerHTML = html;
-  }
-
-
-  // =======================================================
-  // 6. POMODORO TIMER
-  // =======================================================
-  // Total length of the current session, in seconds. Starts from
-  // whatever duration was last saved (defaults to 25 minutes).
+  // Pomodoro
   let totalSeconds = state.pomodoroMinutes * 60;
   let secondsRemaining = totalSeconds;
   let timerId = null;
@@ -482,9 +409,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // ---- Choosing a duration (before starting) ----
-  // Sets both the "total" length and the current countdown to match,
-  // and remembers the choice in state so it persists across visits.
+  // Duration: sets total length + countdown, remembered in state.
   function setDuration(minutes) {
     if (!minutes || minutes < 1) return;
 
@@ -519,7 +444,6 @@ document.addEventListener("DOMContentLoaded", () => {
     setDuration(Math.min(minutes, 180)); // matches the input's max="180"
   });
 
-  // ---- Start / Pause / Reset ----
   startBtn.addEventListener("click", () => {
     if (timerId !== null) return;
     if (secondsRemaining <= 0) return; // nothing to start if it already hit zero
@@ -539,9 +463,7 @@ document.addEventListener("DOMContentLoaded", () => {
         saveState();
         renderProgressNumbers();
 
-        // Play the end-of-session sound. Browsers sometimes briefly
-        // block audio that isn't triggered by a click — catch() here
-        // just quietly ignores that instead of throwing an error.
+        // catch() ignores browsers briefly blocking non-click-triggered audio.
         timerEndSound.currentTime = 0;
         timerEndSound.play().catch(() => {});
       }
@@ -563,9 +485,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
 
-  // =======================================================
-  // 7. DARK / LIGHT MODE
-  // =======================================================
+  // Theme
   function applyTheme(theme) {
     state.theme = theme;
 
@@ -588,20 +508,12 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
 
-  // =======================================================
-  // 8. INITIAL RENDER
-  // =======================================================
-  // Everything above only defines functions and listeners — this
-  // section actually runs them once, using whatever we loaded
-  // from localStorage (or the defaults, on a first visit).
+  // Initial render
   applyTheme(state.theme);
   showView(state.activeView);
   renderEverythingTaskRelated();
-  renderWeekCharts();
 
-  // Make the duration picker reflect a previously saved custom duration
-  // (e.g. if the person picked 45 min last time, that button should
-  // already look selected when they come back).
+  // Reflect a previously saved custom duration in the picker.
   const savedMinutes = state.pomodoroMinutes;
   const matchingPreset = durationPicker.querySelector(`[data-minutes="${savedMinutes}"]`);
   if (matchingPreset) {

@@ -1,19 +1,12 @@
-/* =========================================================
-   1. FONTS & CSS VARIABLES
-========================================================= */
+/* Variables */
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
 
 :root {
-  /* Brand palette — a calmer indigo/violet instead of a flat purple,
-     plus a warm amber accent for streaks/highlights so the page
-     doesn't feel monochrome. */
+  /* Brand palette */
   --color-primary: #5b5fee;
   --color-primary-dark: #4548c9;
   --color-primary-light: #8f92f5;
   --color-primary-tint: #eef0ff;
-
-  --color-amber: #f5a623;
-  --color-amber-tint: #fef3e2;
 
   --color-success: #16a37a;
   --color-success-tint: #e3f7f0;
@@ -59,7 +52,6 @@ body[data-theme="dark"] {
   --bg-track: #2a2a3d;
 
   --color-primary-tint: #23234a;
-  --color-amber-tint: #332813;
   --color-success-tint: #123128;
   --color-danger-tint: #34191b;
 
@@ -72,9 +64,7 @@ body[data-theme="dark"] {
   --shadow-card-hover: 0 2px 4px rgba(0, 0, 0, 0.3), 0 14px 32px rgba(0, 0, 0, 0.35);
 }
 
-/* =========================================================
-   2. RESET / BASE
-========================================================= */
+/* Base */
 * {
   margin: 0;
   padding: 0;
@@ -107,9 +97,6 @@ input, select {
 
 h1, h2, h3 { letter-spacing: -0.01em; }
 
-/* Lucide icons inherit color and size from their parent by default;
-   this keeps every icon crisp and consistently sized unless a
-   component overrides it. */
 i[data-lucide] {
   width: 20px;
   height: 20px;
@@ -117,15 +104,13 @@ i[data-lucide] {
   vertical-align: middle;
 }
 
-/* =========================================================
-   3. APP LAYOUT
-========================================================= */
+/* Layout */
 .app {
   display: flex;
   min-height: 100vh;
 }
 
-/* ---------- Sidebar ---------- */
+/* Sidebar */
 .sidebar {
   width: 232px;
   flex-shrink: 0;
@@ -195,9 +180,6 @@ i[data-lucide] {
   transform: scale(0.98);
 }
 
-/* Active state: a soft tint rather than a hard solid fill, so it
-   reads as "selected" without shouting. The left accent bar gives
-   a clear, subtle indicator that works in both themes. */
 .nav-item.active {
   background-color: var(--color-primary-tint);
   color: var(--color-primary);
@@ -243,16 +225,14 @@ i[data-lucide] {
 
 .theme-icon { width: 17px; height: 17px; }
 
-/* ---------- Main Content ---------- */
+/* Main content */
 .main-content {
   flex-grow: 1;
   padding: 30px 40px 60px;
   max-width: 1180px;
 }
 
-/* =========================================================
-   4. GREETING
-========================================================= */
+/* Greeting */
 .greeting-section {
   display: flex;
   justify-content: space-between;
@@ -283,13 +263,7 @@ i[data-lucide] {
   color: var(--text-secondary);
 }
 
-/* =========================================================
-   5. VIEW SWITCHING
-   =========================================================
-   Only one .view is shown at a time. We hide inactive views with
-   display:none (removed from layout entirely) and fade the active
-   one in — a small, calm transition rather than a hard cut.
-========================================================= */
+/* View switching: only one .view shown at a time */
 .view {
   display: none;
 }
@@ -304,9 +278,7 @@ i[data-lucide] {
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* =========================================================
-   6. CARD (shared building block)
-========================================================= */
+/* Card */
 .card {
   background-color: var(--bg-card);
   border: 1px solid var(--border-color);
@@ -353,14 +325,10 @@ i[data-lucide] {
   background-color: var(--color-primary-tint);
 }
 
-/* =========================================================
-   7. OVERVIEW VIEW
-========================================================= */
-
-/* ---- Hero row ---- */
+/* Overview */
 .hero-row {
   display: grid;
-  grid-template-columns: 1.4fr 1fr 1fr;
+  grid-template-columns: 1.6fr 1fr;
   gap: var(--gap);
   margin-bottom: var(--gap);
 }
@@ -429,14 +397,12 @@ i[data-lucide] {
   opacity: 0.9;
 }
 
-.streak-card,
 .focus-snapshot-card {
   display: flex;
   align-items: center;
   gap: 14px;
 }
 
-.streak-icon,
 .focus-snapshot-icon {
   width: 46px;
   height: 46px;
@@ -445,33 +411,22 @@ i[data-lucide] {
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-}
-
-.streak-icon {
-  background-color: var(--color-amber-tint);
-  color: var(--color-amber);
-}
-
-.focus-snapshot-icon {
   background-color: var(--color-primary-tint);
   color: var(--color-primary);
 }
 
-.streak-value,
 .focus-snapshot-value {
   font-size: 1.05rem;
   font-weight: 800;
   margin-bottom: 2px;
 }
 
-.streak-label,
 .focus-snapshot-label {
   font-size: 0.8rem;
   color: var(--text-secondary);
   line-height: 1.35;
 }
 
-/* ---- Overview grid: tasks preview + deadlines + week chart ---- */
 .overview-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -550,51 +505,7 @@ i[data-lucide] {
   padding: 10px 4px;
 }
 
-/* =========================================================
-   8. WEEKLY CHART (shared between Overview + Progress views)
-========================================================= */
-.week-chart {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  height: 140px;
-  gap: 10px;
-}
-
-.week-bar-wrapper {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 8px;
-  flex: 1;
-  height: 100%;
-}
-
-.week-bar {
-  width: 100%;
-  max-width: 30px;
-  background: linear-gradient(180deg, var(--color-primary-light), var(--color-primary));
-  border-radius: 8px 8px 3px 3px;
-  transition: height var(--transition-medium);
-  position: relative;
-}
-
-/* Highlights today's bar so the chart tells a small story, not
-   just a row of identical shapes. */
-.week-bar.is-today {
-  background: linear-gradient(180deg, var(--color-amber), #e08b1f);
-}
-
-.week-bar-label {
-  font-size: 0.72rem;
-  color: var(--text-secondary);
-  font-weight: 700;
-}
-
-/* =========================================================
-   9. TASKS VIEW
-========================================================= */
+/* Tasks */
 .filter-select, .subject-select {
   padding: 8px 12px;
   border: 1px solid var(--border-color);
@@ -654,8 +565,6 @@ body[data-theme="dark"] .deadline-input {
   color-scheme: dark;
 }
 
-/* Greyed out until the "Deadline" checkbox is ticked, so it's clear
-   the two controls are linked. */
 .deadline-input:disabled {
   opacity: 0.45;
   cursor: not-allowed;
@@ -685,10 +594,8 @@ body[data-theme="dark"] .deadline-input {
   cursor: pointer;
 }
 
-/* Custom checkbox: a small circle that fills with a check icon.
-   Native checkboxes are hard to style consistently across browsers,
-   so we hide the real input visually but keep it functional for
-   accessibility, and draw our own circle with CSS. */
+/* Custom checkbox: native ones can't be styled consistently, so we
+   hide the real input visually and draw our own circle with CSS. */
 .task-checkbox {
   appearance: none;
   -webkit-appearance: none;
@@ -789,9 +696,7 @@ body[data-theme="dark"] .deadline-input {
   padding: 30px 0 10px;
 }
 
-/* =========================================================
-   10. PROGRESS VIEW
-========================================================= */
+/* Progress */
 .progress-view-grid {
   display: grid;
   grid-template-columns: 1fr 2fr;
@@ -812,10 +717,8 @@ body[data-theme="dark"] .deadline-input {
   margin: 18px 0;
 }
 
-/* Shared conic-gradient "ring" look, used for both the overall
-   progress ring and the Pomodoro timer ring. --progress (0-100) and
-   --ring-size / --ring-hole-size control the specific look; JS only
-   ever needs to update the --progress variable to animate these. */
+/* Shared conic-gradient ring, reused for progress + Pomodoro. JS only
+   needs to update --progress; --ring-size/--ring-hole-size set the size. */
 .ring {
   --progress: 0;
   width: var(--ring-size);
@@ -893,9 +796,7 @@ body[data-theme="dark"] .deadline-input {
   text-align: right;
 }
 
-/* =========================================================
-   11. FOCUS VIEW (Pomodoro)
-========================================================= */
+/* Focus */
 .pomodoro-card-large {
   max-width: 420px;
   margin: 10px auto 0;
@@ -1020,9 +921,7 @@ body[data-theme="dark"] .deadline-input {
   font-weight: 600;
 }
 
-/* =========================================================
-   12. BUTTONS
-========================================================= */
+/* Buttons */
 .btn {
   display: inline-flex;
   align-items: center;
@@ -1069,9 +968,7 @@ body[data-theme="dark"] .deadline-input {
   transform: none !important;
 }
 
-/* =========================================================
-   13. RESPONSIVE
-========================================================= */
+/* Responsive */
 @media (max-width: 980px) {
   .hero-row { grid-template-columns: 1fr; }
   .overview-grid { grid-template-columns: 1fr; }
