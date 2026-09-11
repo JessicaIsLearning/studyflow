@@ -593,8 +593,7 @@ body[data-theme="dark"] .deadline-input {
   cursor: pointer;
 }
 
-/* Custom checkbox: native ones can't be styled consistently, so we
-   hide the real input visually and draw our own circle with CSS. */
+
 .task-checkbox {
   appearance: none;
   width: 21px;
@@ -714,8 +713,6 @@ body[data-theme="dark"] .deadline-input {
   margin: 18px 0;
 }
 
-/* Shared conic-gradient ring, reused for progress + Pomodoro. JS only
-   needs to update --progress; --ring-size/--ring-hole-size set the size. */
 .ring {
   --progress: 0;
   width: var(--ring-size);

@@ -1,6 +1,3 @@
-// StudyFlow — script.js
-// All app data lives in one `state` object: update state -> saveState() -> re-render.
-
 document.addEventListener("DOMContentLoaded", () => {
 
   function renderIcons() {
@@ -28,7 +25,6 @@ document.addEventListener("DOMContentLoaded", () => {
     pomodoroMinutes: 25,
   };
 
-  // Merges saved data over the defaults so new fields survive old saves.
   function loadState() {
     const saved = localStorage.getItem(STORAGE_KEY);
     if (!saved) return structuredClone(defaultState);
@@ -142,7 +138,6 @@ document.addEventListener("DOMContentLoaded", () => {
     item.addEventListener("click", () => showView(item.dataset.view));
   });
 
-  // "View all" link inside the Overview task card jumps to the Tasks view.
   document.querySelectorAll("[data-goto]").forEach((btn) => {
     btn.addEventListener("click", () => showView(btn.dataset.goto));
   });
@@ -153,8 +148,6 @@ document.addEventListener("DOMContentLoaded", () => {
     return subject.charAt(0).toUpperCase() + subject.slice(1);
   }
 
-  // Turns the raw "2026-09-11T23:59" value from a datetime-local input
-  // into something readable, like "Sep 11, 11:59 PM".
   function formatDeadline(deadlineString) {
     if (!deadlineString) return "";
 
@@ -169,7 +162,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Builds one <li> task row as an HTML string from a task object.
   function taskItemHTML(task) {
     const deadlineText = formatDeadline(task.deadline);
     const importantFlag = task.important
@@ -203,7 +195,6 @@ document.addEventListener("DOMContentLoaded", () => {
     renderIcons();
   }
 
-  // A small preview (max 4 tasks) shown on the Overview page.
   function renderTaskPreview() {
     const previewTasks = state.tasks.slice(0, 4);
 
@@ -220,9 +211,7 @@ document.addEventListener("DOMContentLoaded", () => {
     `).join("");
   }
 
-  // Deadlines list: tasks marked "important" that aren't done yet,
-  // soonest deadline first. Tasks with no specific date/time (deadline
-  // is null) are sorted to the end rather than treated as "soonest".
+
   function renderDeadlines() {
     const deadlines = state.tasks
       .filter((task) => task.important && !task.completed)
@@ -269,7 +258,6 @@ document.addEventListener("DOMContentLoaded", () => {
     progressRingValue.textContent = `${percent}%`;
     progressCaption.textContent = `${done} of ${total} tasks done today`;
 
-    // Greeting subtitle reacts to real progress instead of a static line.
     if (total > 0 && done === total) {
       greetingSubtitle.textContent = "All done for today — nice work!";
     } else if (done === 0) {
@@ -303,8 +291,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }).join("");
   }
 
-  // Runs every render function that depends on the task list.
-  // Called after any add / delete / toggle / filter change.
+
   function renderEverythingTaskRelated() {
     renderTaskList();
     renderTaskPreview();
@@ -312,7 +299,6 @@ document.addEventListener("DOMContentLoaded", () => {
     renderProgressNumbers();
   }
 
-  // Event delegation: one listener on the list instead of one per task.
   taskList.addEventListener("change", (event) => {
     if (!event.target.classList.contains("task-checkbox")) return;
 
@@ -344,14 +330,13 @@ document.addEventListener("DOMContentLoaded", () => {
     const text = taskInput.value.trim();
     if (text === "") return;
 
-    // Only store a deadline if "Deadline" is checked AND a date was picked.
     let deadline = null;
     if (importantInput.checked && deadlineInput.value) {
       deadline = deadlineInput.value;
     }
 
     const newTask = {
-      id: Date.now(), // a quick way to get a unique number
+      id: Date.now(), 
       text,
       subject: subjectSelect.value,
       important: importantInput.checked,
@@ -373,9 +358,6 @@ document.addEventListener("DOMContentLoaded", () => {
   // ---- Filtering ----
   filterSelect.addEventListener("change", renderTaskList);
 
-  // ---- Enable the date/time picker only once "Deadline" is checked ----
-  // This keeps the form honest: you can't set a deadline time without
-  // first saying the task actually has one.
   importantInput.addEventListener("change", () => {
     deadlineInput.disabled = !importantInput.checked;
     if (!importantInput.checked) {
@@ -405,14 +387,12 @@ document.addEventListener("DOMContentLoaded", () => {
   function setTimerButtonsRunning(isRunning) {
     startBtn.disabled = isRunning;
     pauseBtn.disabled = !isRunning;
-    // Prevent changing the duration mid-session — the ring's math above
-    // assumes totalSeconds doesn't shift while a countdown is running.
+
     durationPicker.querySelectorAll("button, input").forEach((el) => {
       el.disabled = isRunning;
     });
   }
 
-  // Duration: sets total length + countdown, remembered in state.
   function setDuration(minutes) {
     if (!minutes || minutes < 1) return;
 
@@ -425,7 +405,6 @@ document.addEventListener("DOMContentLoaded", () => {
     renderTimer();
   }
 
-  // Marks exactly one button as .active among a group (used for duration presets).
   function setActiveButton(buttons, target) {
     buttons.forEach((b) => b.classList.toggle("active", b === target));
   }
@@ -433,24 +412,22 @@ document.addEventListener("DOMContentLoaded", () => {
   durationPicker.querySelectorAll(".duration-btn").forEach((btn) => {
     btn.addEventListener("click", () => {
       setActiveButton(durationPicker.querySelectorAll(".duration-btn"), btn);
-      customMinutesInput.value = ""; // clear custom field so it's clear a preset is active
+      customMinutesInput.value = "";
       setDuration(Number(btn.dataset.minutes));
     });
   });
 
-  // Typing a custom number of minutes overrides the presets.
   customMinutesInput.addEventListener("change", () => {
     const minutes = Math.round(Number(customMinutesInput.value));
     if (!minutes || minutes < 1) return;
 
     setActiveButton(durationPicker.querySelectorAll(".duration-btn"), null);
-    setDuration(Math.min(minutes, 180)); // matches the input's max="180"
+    setDuration(Math.min(minutes, 180)); 
   });
 
   startBtn.addEventListener("click", () => {
     if (timerId !== null) return;
-    if (secondsRemaining <= 0) return; // nothing to start if it already hit zero
-
+    if (secondsRemaining <= 0) return; 
     setTimerButtonsRunning(true);
 
     timerId = setInterval(() => {
@@ -466,7 +443,6 @@ document.addEventListener("DOMContentLoaded", () => {
         saveState();
         renderProgressNumbers();
 
-        // catch() ignores browsers briefly blocking non-click-triggered audio.
         timerEndSound.currentTime = 0;
         timerEndSound.play().catch(() => {});
       }
@@ -502,7 +478,7 @@ document.addEventListener("DOMContentLoaded", () => {
       themeLabel.textContent = "Dark Mode";
     }
 
-    renderIcons(); // needed because we just swapped the icon name above
+    renderIcons(); 
     saveState();
   }
 
@@ -516,7 +492,6 @@ document.addEventListener("DOMContentLoaded", () => {
   showView(state.activeView);
   renderEverythingTaskRelated();
 
-  // Reflect a previously saved custom duration in the picker.
   const savedMinutes = state.pomodoroMinutes;
   const matchingPreset = durationPicker.querySelector(`[data-minutes="${savedMinutes}"]`);
   if (matchingPreset) {
